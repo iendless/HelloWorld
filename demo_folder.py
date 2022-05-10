@@ -15,6 +15,7 @@ def writeDot(ppp, names):
     file = open(dotPath, "a+")
     file.write(str(ppp))
     file.write('\n')
+    file.flush()
 
 if __name__ == "__main__":
     torch.backends.cudnn.benchmark = True
@@ -56,12 +57,13 @@ if __name__ == "__main__":
     if cfg.dataset == 'CULane':
         #splits = ['test0_normal.txt', 'test1_crowd.txt', 'test2_hlight.txt', 'test3_shadow.txt', 'test4_noline.txt', 'test5_arrow.txt', 'test6_curve.txt', 'test7_cross.txt', 'test8_night.txt']
         #datasets = [LaneTestDataset(cfg.data_root,os.path.join(cfg.data_root, 'list/test_split/'+split),img_transform = img_transforms) for split in splits]
-        splits = ['test2.txt'] #非culane数据集时
+        splits = ['test.txt'] #非culane数据集时
         datasets = [LaneTestDataset(cfg.data_root,os.path.join(cfg.data_root, split),img_transform = img_transforms) for split in splits] #非culane数据集时
-        img_w, img_h = 1640, 590
+        # 修改成了KTTI 的尺寸
+        img_w, img_h = 1242, 375    
         row_anchor = culane_row_anchor
     elif cfg.dataset == 'Tusimple':
-        splits = ['test2.txt']
+        splits = ['test.txt']
         datasets = [LaneTestDataset(cfg.data_root,os.path.join(cfg.data_root, split),img_transform = img_transforms) for split in splits]
         img_w, img_h = 1280, 720
         row_anchor = tusimple_row_anchor
@@ -75,7 +77,7 @@ if __name__ == "__main__":
         vout = cv2.VideoWriter(split[:-3]+'avi', fourcc , 30.0, (img_w, img_h))
         for i, data in enumerate(tqdm.tqdm(loader)):
             imgs, names = data
-            imgs = imgs.cuda()
+            imgs = imgs.to("cuda:1")
             with torch.no_grad():
                 out = net(imgs)
 
