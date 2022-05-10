@@ -1,0 +1,6 @@
+my_test/
+log/
+*.pyc
+*.pth
+*.avi
+*.jpg
