@@ -11,7 +11,7 @@ from data.dataset import LaneTestDataset
 from data.constant import culane_row_anchor, tusimple_row_anchor
 
 def writeDot(ppp, names):
-    dotPath = names[:-4]+".txt"
+    dotPath = names[:-4] +".txt"
     file = open(dotPath, "a+")
     file.write(str(ppp))
     file.write('\n')
